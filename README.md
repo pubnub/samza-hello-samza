@@ -14,24 +14,27 @@ export ARTIFACTORY_PASSWORD='<some_pass>'
 ```
 
 ### Packaging/Deploying/Running 
-1. ./bin/grid bootstrap
-2. ./bin/grid start all
-3. ./gradlew clean distTar
-4. mkdir deploy/samza
-5. tar -xvf build/distributions/hello-samza-0.9.1.4-SNAPSHOT-dist.tar.gz -C deploy/samza
-6. deploy/samza/bin/run-job.sh --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$PWD/deploy/samza/config/pubnub-app-master.properties
-7. curl -H "Content-Type: application/json"  -X POST -d "{ \"job.application_id\": 1, \"job.name\" : \"foo.bar\", \"max_memory_mb\" : 512, \"max_cpu_cores\" : 1, \"needed_containers\" : 2 }" http://localhost:7778/
+1. `./bin/grid bootstrap`
+2. `./bin/grid start all`
+3. `./gradlew clean distTar`
+4. `mkdir deploy/samza`
+5. `tar -xvf build/distributions/hello-samza-0.9.1.4-SNAPSHOT-dist.tar.gz -C deploy/samza`
+6. `deploy/samza/bin/run-job.sh --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$PWD/deploy/samza/config/pubnub-app-master.properties`
+7. `curl -H "Content-Type: application/json"  -X POST -d "{ \"job.application_id\": 1, \"job.name\" : \"foo.bar\", \"max_memory_mb\" : 512, \"max_cpu_cores\" : 1, \"needed_containers\" : 2 }" http://localhost:7778/`
 
 ### Iterating with samza
-from samza build/publish the subproject 
-1. ./gradlew clean samza-yarn:generatePomFileForMavenJavaPublication samza-yarn:artifactoryPublish samza-core:generatePomFileForMavenJavaPublication samza-core:artifactoryPublish
+from samza build/publish the subproject
+
+`./gradlew clean samza-yarn:generatePomFileForMavenJavaPublication samza-yarn:artifactoryPublish samza-core:generatePomFileForMavenJavaPublication samza-core:artifactoryPublish`
+
 from hello samza
-2. rm -rf ~/.gradle/caches
-3. ./gradlew clean distTar
-4. rm -rf deploy/samza && mkdir deploy/samza
-5. tar -xvf build/distributions/hello-samza-0.9.1.4-SNAPSHOT-dist.tar.gz -C deploy/samza
-6. deploy/samza/bin/run-job.sh --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$PWD/deploy/samza/config/pubnub-app-master.properties
-7. curl -H "Content-Type: application/json"  -X POST -d "{ \"job.application_id\": 1, \"job.name\" : \"foo.bar\", \"max_memory_mb\" : 512, \"max_cpu_cores\" : 1, \"needed_containers\" : 2 }" http://localhost:7778/
+
+1. `rm -rf ~/.gradle/caches`
+2. `./gradlew clean distTar`
+3. `rm -rf deploy/samza && mkdir deploy/samza`
+4. `tar -xvf build/distributions/hello-samza-0.9.1.4-SNAPSHOT-dist.tar.gz -C deploy/samza`
+5. `deploy/samza/bin/run-job.sh --config-factory=org.apache.samza.config.factories.PropertiesConfigFactory --config-path=file://$PWD/deploy/samza/config/pubnub-app-master.properties`
+6. `curl -H "Content-Type: application/json"  -X POST -d "{ \"job.application_id\": 1, \"job.name\" : \"foo.bar\", \"max_memory_mb\" : 512, \"max_cpu_cores\" : 1, \"needed_containers\" : 2 }" http://localhost:7778/`
 
 There maybe a better way to clear gradle caches but haven't found it yet
 
