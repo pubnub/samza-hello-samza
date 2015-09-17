@@ -29,9 +29,15 @@ task wrapper(type: Wrapper) {
 
 version = "$SAMZA_VERSION"
 
+
+allprojects {
+    def artifactory_url = System.env.ARTIFACTORY_URL 
+
+
 repositories {
     mavenCentral()
     maven { url "https://repository.apache.org/content/groups/public" }
+    maven { url "${artifactory_url}libs-snapshot-local"  }
 }
 
 // a configuration for dependencies that need exploding into package
@@ -59,6 +65,7 @@ dependencies {
     runtime(group: 'org.apache.hadoop', name: 'hadoop-hdfs', version: "$HADOOP_VERSION")
 }
 
+}
 // make the samza distribution .tgz file
 task distTar(dependsOn: build, type: Tar) {
     destinationDir(new File(project.buildDir, "/distributions"))
@@ -70,6 +77,7 @@ task distTar(dependsOn: build, type: Tar) {
             include "wikipedia-feed.properties"
             include "wikipedia-parser.properties"
             include "wikipedia-stats.properties"
+            include "pubnub-app-master.properties"
 
             // expand the Maven tokens with Gradle equivalents.  Also change 'target' (Maven) to 'build/distributions' (Gradle)
             filter { String line ->
